@@ -1,0 +1,1 @@
+ALTER TABLE `items` ADD `consommable` VARCHAR(255) NULL DEFAULT NULL;
