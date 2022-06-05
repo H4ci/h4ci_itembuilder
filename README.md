@@ -20,4 +20,4 @@ start h4ci_itembuilder
 * Pour changer le groupe ayant le droit d'ouvrir le menu, c'est côté client à la ligne 42
 
 
-* Après l'ajout d'un item, un reboot est nécessaire **(ne sera plus nécessaire au prochain update du script)**
+* Après l'ajout d'un item, un reboot est nécessaire *(ne sera plus nécessaire au prochain update du script)*
