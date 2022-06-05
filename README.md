@@ -14,7 +14,7 @@ start h4ci_itembuilder
 
 [A SAVOIR]
 
-* Si vos items sont sous le système de poid et non de limite, merci de mettre ``weight`` dans la variable ``itemlimite`` du fichier client (ligne 15)
+* Si vos items sont sous le système de poids et non de limite, merci de mettre ``weight`` dans la variable ``itemlimite`` du fichier client (ligne 15)
 
 
 * Pour changer le groupe ayant le droit d'ouvrir le menu, c'est côté client à la ligne 42
