@@ -21,3 +21,6 @@ start h4ci_itembuilder
 
 
 * Après l'ajout d'un item, un reboot est nécessaire *(ne sera plus nécessaire au prochain update du script)*
+
+
+* Le menu s'occupe de tout, pas besoin de rendre consommable un item ou autre, tout ce fait automatiquement
