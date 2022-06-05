@@ -6,7 +6,7 @@ Aperçu : https://streamable.com/c7vy3i
 
 1) Importer sql.sql dans votre base de données
 
-2) Ajouter à votre server.cfg juste après votre esx.basicneeds et esx_status :
+2) Ajouter à votre server.cfg juste après votre esx_basicneeds et esx_status :
 
 ```
 start h4ci_itembuilder
