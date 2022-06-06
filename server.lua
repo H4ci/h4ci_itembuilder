@@ -1,12 +1,18 @@
 ESX = nil
 
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+TriggerEvent('esx:getSharedObject', function(obj)
+    ESX = obj
+end)
 
-MySQL.ready(function ()
+local function checkRole(xPlayer)
+    return (xPlayer.getGroup() == "superadmin")
+end
+
+MySQL.ready(function()
     listeitemzebamk = {}
     MySQL.Async.fetchAll("SELECT * FROM items", {}, function(data)
-        for _,v in pairs(data) do
-            table.insert(listeitemzebamk, {name = v.name, label = v.label, limite = v.limit, consommable = v.consommable})
+        for _, v in pairs(data) do
+            table.insert(listeitemzebamk, { name = v.name, label = v.label, limite = v.limit, consommable = v.consommable })
             if v.consommable == 'boisson' then
                 print(v.consommable)
                 ESX.RegisterUsableItem(v.name, function(source)
@@ -39,13 +45,15 @@ ESX.RegisterServerCallback('h4ci_itembuilder:checkrole', function(source, cb)
     cb(groupe)
 end)
 
-
 RegisterNetEvent('h4ci_itembuilder:ajout')
 AddEventHandler('h4ci_itembuilder:ajout', function(configitem, itemlimite)
     local xPlayer = ESX.GetPlayerFromId(source)
+    if (not (checkRole(xPlayer))) then
+        return
+    end
     typeconsommable = 'rien'
     if configitem.consommable == true then
-        if configitem.boisson == true then  
+        if configitem.boisson == true then
             typeconsommable = 'boisson'
         else
             typeconsommable = 'nourriture'
@@ -69,40 +77,54 @@ AddEventHandler('h4ci_itembuilder:ajout', function(configitem, itemlimite)
 end)
 
 RegisterServerEvent('h4ci_itembuilder:maj')
-AddEventHandler('h4ci_itembuilder:maj', function (maj)
+AddEventHandler('h4ci_itembuilder:maj', function(maj)
+    local _src = source
+    local xPlayer = ESX.GetPlayerFromId(_src)
+    if (not (checkRole(xPlayer))) then
+        return
+    end
     print(maj.limite)
-        MySQL.Async.execute(
+    MySQL.Async.execute(
             'UPDATE items SET `limit` = @limit WHERE name = @name',
             {
                 ['@limit'] = tonumber(maj.limite),
                 ['@name'] = maj.name,
             }
-        )
+    )
 end)
 
-ESX.RegisterServerCallback('h4ci_itemzeb:majitemzebsrv', function(source, cb)
+ESX.RegisterServerCallback('h4ci_itemzeb:majitemzebsrv', function(_src, cb)
+    local xPlayer = ESX.GetPlayerFromId(_src)
+    if (not (checkRole(xPlayer))) then
+        return
+    end
     majitems = {}
     MySQL.Async.fetchAll("SELECT * FROM items", {}, function(data)
-        for _,v in pairs(data) do
-            table.insert(majitems, {name = v.name, label = v.label, limite = v.limit, consommable = v.consommable})
+        for _, v in pairs(data) do
+            table.insert(majitems, { name = v.name, label = v.label, limite = v.limit, consommable = v.consommable })
         end
         cb(majitems)
     end)
 end)
 
 RegisterServerEvent('h4ci_itemzeb:delete')
-AddEventHandler('h4ci_itemzeb:delete', function (name)
-  	if name ~= nil then
-  		MySQL.Async.execute(
-			'DELETE FROM items WHERE name = @name',
-			{
-				['@name'] = name
-			}
-		)
-		TriggerClientEvent('esx:showNotification', source, "Suppresion ok!")
-  	else
-  		TriggerClientEvent('esx:showNotification', source, "Impossible de supprimer, introuvable")
-  	end
+AddEventHandler('h4ci_itemzeb:delete', function(name)
+    local _src = source
+    local xPlayer = ESX.GetPlayerFromId(_src)
+    if (not (checkRole(xPlayer))) then
+        return
+    end
+    if name ~= nil then
+        MySQL.Async.execute(
+                'DELETE FROM items WHERE name = @name',
+                {
+                    ['@name'] = name
+                }
+        )
+        TriggerClientEvent('esx:showNotification', source, "Suppresion ok!")
+    else
+        TriggerClientEvent('esx:showNotification', source, "Impossible de supprimer, introuvable")
+    end
 
 end)
 
